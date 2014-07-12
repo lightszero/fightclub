@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 7566bc121e221c2488f859e462fa6679
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - joyback: {instanceID: 0}
+  - jump: {fileID: 2800000, guid: 86928c782b4e8c944919d3ed7b03c124, type: 3}
+  - kick: {fileID: 2800000, guid: 35cc5ee98e0069545845e2eaf4ea8606, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
