@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D1430CED-7CFB-4335-9B38-4369EB0CED41}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>clgf</RootNamespace>
+    <AssemblyName>clgf</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\temp\wp\clgf_wp\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;NO_SERIALIZATION;XNA</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Xna.Framework" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics" />
+    <Reference Include="Microsoft.Xna.Framework.Input.Touch" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anim\AniData.cs" />
+    <Compile Include="Anim\AniDraw.cs" />
+    <Compile Include="Anim\SpriteAniMgr.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="logic\State.cs" />
+    <Compile Include="Nuclex\Game\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\CygonRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\OutOfSpaceException.cs" />
+    <Compile Include="Nuclex\Game\Packing\RectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\SimpleRectanglePacker.cs" />
+    <Compile Include="Quadbuf\QuadBuf.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="Scene\SceneBGMgr.cs" />
+    <Compile Include="Scene\SceneObj.cs" />
+    <Compile Include="Scene\SceneObjBar.cs" />
+    <Compile Include="Scene\SceneObjChar.cs" />
+    <Compile Include="Scene\SceneObjTex.cs" />
+    <Compile Include="Scene\SceneObjTexBlock.cs" />
+    <Compile Include="Texture\TextureMgr.cs" />
+    <Compile Include="text\SpriteFont.cs" />
+    <Compile Include="UI\control\Pic.cs" />
+    <Compile Include="UI\control\Pic3x3.cs" />
+    <Compile Include="UI\control\SceneObjText.cs" />
+    <Compile Include="UI\control\SceneObjTextNum.cs" />
+    <Compile Include="UI\control\UI_Btn.cs" />
+    <Compile Include="UI\panel\UI_Panel.cs" />
+    <Compile Include="UI\panel\UI_PanelFold.cs" />
+    <Compile Include="UI\panel\UI_PanelList.cs" />
+    <Compile Include="UI\SceneObj_UIContainer.cs" />
+    <Compile Include="UI\UIElement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\clgf_font_wp\clgf_font_wp.csproj">
+      <Project>{54CA7D41-0217-4089-A64E-C4570DDC01F3}</Project>
+      <Name>clgf_font_wp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\clgf_type\clgf_type_wp.csproj">
+      <Project>{2C179994-1033-4470-9841-87A152E737AA}</Project>
+      <Name>clgf_type_wp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

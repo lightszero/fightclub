@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A4755324-2EF6-4714-814E-77B745B6E0B6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>clgf</RootNamespace>
+    <AssemblyName>clgf-monogames</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;MONOGAME</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MonoGame.Framework.Windows">
+      <HintPath>..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\MonoGame.Framework.Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Anim\AniData.cs" />
+    <Compile Include="Anim\AniDraw.cs" />
+    <Compile Include="Anim\SpriteAniMgr.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="Nuclex\Game\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\CygonRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\OutOfSpaceException.cs" />
+    <Compile Include="Nuclex\Game\Packing\RectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\SimpleRectanglePacker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="Scene\SceneBGMgr.cs" />
+    <Compile Include="Scene\SceneObj.cs" />
+    <Compile Include="Scene\SceneObjChar.cs" />
+    <Compile Include="Scene\SceneObjTex.cs" />
+    <Compile Include="Scene\SceneObjTexBlock.cs" />
+    <Compile Include="Texture\TextureMgr.cs" />
+    <Compile Include="UI\SceneObj_UIContainer.cs" />
+    <Compile Include="UI\UI_Btn.cs" />
+    <Compile Include="xfl\ProjParser.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

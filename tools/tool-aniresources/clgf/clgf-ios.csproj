@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F919C990-2935-41C6-AA94-A3967CD777CC}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>clgfios</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>clgf-ios</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;IOS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>False</ConsolePause>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="MonoGame.Framework">
+      <HintPath>..\libs\monogame\ios\Debug\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="ILogger.cs" />
+    <Compile Include="Anim\AniData.cs" />
+    <Compile Include="Anim\AniDraw.cs" />
+    <Compile Include="Nuclex\Game\Packing\ArevaloRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\CygonRectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\OutOfSpaceException.cs" />
+    <Compile Include="Nuclex\Game\Packing\RectanglePacker.cs" />
+    <Compile Include="Nuclex\Game\Packing\SimpleRectanglePacker.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="Scene\SceneBGMgr.cs" />
+    <Compile Include="Scene\SceneObj.cs" />
+    <Compile Include="Texture\TextureMgr.cs" />
+    <Compile Include="text\SpriteFont.cs" />
+    <Compile Include="text\Font-IOS.cs" />
+    <Compile Include="logic\State.cs" />
+    <Compile Include="UI\SceneObj_UIContainer.cs" />
+    <Compile Include="UI\UI_Btn.cs" />
+    <Compile Include="Scene\SceneObjChar.cs" />
+    <Compile Include="Scene\SceneObjTex.cs" />
+    <Compile Include="Scene\SceneObjTexBlock.cs" />
+    <Compile Include="Scene\SceneObjText.cs" />
+    <Compile Include="Anim\SpriteAniMgr.cs" />
+    <Compile Include="Scene\SceneObjTextNum.cs" />
+    <Compile Include="Scene\SceneObjBar.cs" />
+    <Compile Include="Quadbuf\QuadBuf.cs" />
+    <Compile Include="UI\ClipArea.cs" />
+    <Compile Include="UI\Pic3x3.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Anim\" />
+    <Folder Include="Nuclex\" />
+    <Folder Include="Scene\" />
+    <Folder Include="Texture\" />
+    <Folder Include="text\" />
+    <Folder Include="logic\" />
+    <Folder Include="UI\" />
+    <Folder Include="Quadbuf\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ta.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\clgf_type\clgf_type_ios.csproj">
+      <Project>{82B4DCA7-325D-4FDD-8687-3C966E1DF886}</Project>
+      <Name>clgf_type_ios</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
