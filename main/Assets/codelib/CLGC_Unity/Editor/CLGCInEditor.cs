@@ -34,8 +34,15 @@ public class CLGCInEditor  {
         EditorUtility.DisplayDialog("About CLGC","Hello World.", "Ok");
 
     }
-	
-	
+    [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+    public static extern bool FreeConsole();
+
+    [MenuItem("DEBUG/CLOSECONSOLE", false, 1)] 
+    public static void CLOSECONSOLE()
+    {
+
+        FreeConsole();
+    }
 	
     //[MenuItem("GameObject/Create Other/CLGC/RenderBoard", false, 12900)]
     //static void DoCreateSpriteObject()

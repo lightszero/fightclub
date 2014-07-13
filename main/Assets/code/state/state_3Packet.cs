@@ -11,7 +11,6 @@ public class state_3Packet : IState
         this.mgr = mgr;
 #if UNITY_STANDALONE
 
-        //从磁盘加载
 
 #endif
         //从网络加载

@@ -19,6 +19,8 @@ public class com_main : MonoBehaviour, IStateMgr
     // Update is called once per frame
     void Update()
     {
+        ResmgrNative.Instance.Update();
+
         nodeUIRoot.DoUpdate();
 
         curstate.OnUpdate();
