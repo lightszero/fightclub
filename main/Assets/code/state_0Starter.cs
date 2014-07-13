@@ -2,9 +2,13 @@
 using System.Collections;
 using System.Runtime.InteropServices;
 using System;
+using CLUI;
 
 public class state_0Starter : IState
 {
+    #region console
+#if UNITY_STANDALONE
+
     [DllImport("kernel32.dll")]
     public static extern bool AllocConsole();
     [DllImport("kernel32.dll",
@@ -21,50 +25,73 @@ public class state_0Starter : IState
     /// <returns></returns>
     [DllImport("kernel32.dll")]
     public static extern bool FreeConsole();
+#endif
 
     void InitConsole()
     {
+#if UNITY_STANDALONE
+
+        FreeConsole();
         AllocConsole();
         IntPtr stdHandle = GetStdHandle(STD_OUTPUT_HANDLE);
         Microsoft.Win32.SafeHandles.SafeFileHandle safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(stdHandle, true);
-        System.IO.FileStream fileStream = new System.IO.FileStream(stdHandle, System.IO.FileAccess.Write);
+        System.IO.FileStream fileStream = new System.IO.FileStream(safeFileHandle, System.IO.FileAccess.Write);
         System.Text.Encoding encoding = System.Text.Encoding.GetEncoding(Console.OutputEncoding.CodePage);
         System.IO.StreamWriter standardOutput = new System.IO.StreamWriter(fileStream, encoding);
         standardOutput.AutoFlush = true;
         Console.SetOut(standardOutput);
+        Application.RegisterLogCallbackThreaded((text, trace, type) =>
+            {
+                if (type == LogType.Error)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                else if (type == LogType.Warning)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                Console.WriteLine(text);
+            });
+#endif
+
     }
+    #endregion
     IStateMgr mgr;
+    CLUI_Node_Texture back;
     public void OnInit(IStateMgr mgr)
     {
         this.mgr = mgr;
-        Debug.developerConsoleVisible = true;
-        if (Application.isEditor == false)
+        //if (Application.isEditor == false)
         {
             InitConsole();
         }
-        Debug.Log("state_0Starter:OnInit");
-        System.Console.WriteLine("state_0Starter:OnInit");
-#if UNITY_STANDALONE 
-
-        //从磁盘加载
-
-#endif
+        back =new CLUI_Node_Texture("back");
+        back.rectScale = CLUI_Border.ScaleFill;
+        back.texture = Resources.Load<Texture2D>("back");
+        mgr.nodeUIRoot.AddNode(back);
+        Debug.LogWarning("state_0Starter::OnInit");
         //从网络加载
     }
 
     public void OnExit()
     {
-
+        Debug.Log("state_0Starter::Exit");
+        mgr.nodeUIRoot.ClearNode();
     }
     float timer = 0;
     public void OnUpdate()
     {
         timer += Time.deltaTime;
-        if (timer > 1.0f)
+        float alpha = (2.0f - timer) *0.5f;
+        back.color.a = alpha;
+        if (timer > 2.0f)
         {
             timer -= 1.0f;
-            Debug.Log("state_0Starter:OnUpdate");
-            System.Console.WriteLine("state_0Starter:OnUpdate");
+            mgr.ChangeState(new state_1PacketList());
         }
 
     }

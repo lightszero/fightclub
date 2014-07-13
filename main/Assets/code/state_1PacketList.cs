@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using CLUI;
 
 public class state_1PacketList : IState
 {
@@ -9,12 +10,14 @@ public class state_1PacketList : IState
     public void OnInit(IStateMgr mgr)
     {
         this.mgr = mgr;
-#if UNITY_STANDALONE
 
-        //从磁盘加载
-
-#endif
-        //从网络加载
+        var back = new CLUI.CLUI_Node_Box("back");
+        back.rectScale = CLUI_Border.ScaleFill;
+        mgr.nodeUIRoot.AddNode(back);
+        var btn01=new CLUI.CLUI_Node_Button("btn01");
+        btn01.rectScale = new CLUI_Border(0.1f, 0.1f, 0.5f, 0.2f);
+        btn01.text = "hello";
+        mgr.nodeUIRoot.AddNode(btn01);
     }
 
     public void OnExit()
