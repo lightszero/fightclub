@@ -32,6 +32,7 @@ public class state_1PacketList : IState
 
 
         //从磁盘加载
+#if UNITY_STANDALONE
         string pakpath = "";
         if (Application.isEditor)
         {
@@ -57,6 +58,7 @@ public class state_1PacketList : IState
             });
         }
         ResmgrNative.Instance.SetCacheUrl(cacheurls.Dequeue());
+#endif
     }
     void AddPacket(string _cacheurl, Texture2D tex)
     {

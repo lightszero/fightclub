@@ -42,16 +42,16 @@ public class vjoy : MonoBehaviour
         }
         {
             BtnInfo i = new BtnInfo();
-            i.dest = new Rect(size/3*-0.5f + size / 3, size / 3 * 0.5f, size / 3, size / 3);
+            i.dest = new Rect(size / 3 * -0.5f + size / 3, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha1;
-            i.uv = CalcUI(joyback, 64 * 4+128, 0, 64, 64);
+            i.uv = CalcUI(joyback, 64 * 4 + 128, 0, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 192, 0, 64, 64);
             btnInfo.Add(i);
         }
         {
             BtnInfo i = new BtnInfo();
-            i.dest = new Rect(size/3 * -0.5f + size / 3 * 2, size / 3 * 0.5f, size / 3, size / 3);
+            i.dest = new Rect(size / 3 * -0.5f + size / 3 * 2, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha2;
             i.uv = CalcUI(joyback, 64 * 4 + 128, 64, 64, 64);
@@ -60,7 +60,7 @@ public class vjoy : MonoBehaviour
         }
         {
             BtnInfo i = new BtnInfo();
-            i.dest = new Rect(size/3 * -0.5f + size / 3 * 3, size / 3 * 0.5f, size / 3, size / 3);
+            i.dest = new Rect(size / 3 * -0.5f + size / 3 * 3, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha3;
             i.uv = CalcUI(joyback, 64 * 4 + 128, 128, 64, 64);
@@ -139,8 +139,8 @@ public class vjoy : MonoBehaviour
                 foreach (var bi in btnInfo)
                 {
                     Rect r = bi.dest;
-                    r.x += Screen.width;
-                    r.y += Screen.height;
+                    r.x += Screen.width * bi.screenpos.x;
+                    r.y += Screen.height * bi.screenpos.y;
                     if (bi.bdown == false && r.Contains(pos))
                         bi.bdown = true;
                 }
@@ -150,7 +150,7 @@ public class vjoy : MonoBehaviour
 #else
 
         //需要的时候得模拟一下
-        //if (Input.multiTouchEnabled == false)
+        if (Input.multiTouchEnabled == false)
         {
             Vector2 pos = Input.mousePosition;
             lasttouch = pos;
@@ -172,8 +172,8 @@ public class vjoy : MonoBehaviour
                     if (Input.GetMouseButton(0))
                     {
                         Rect r = bi.dest;
-                        r.x += Screen.width*bi.screenpos.x;
-                        r.y += Screen.height*bi.screenpos.y;
+                        r.x += Screen.width * bi.screenpos.x;
+                        r.y += Screen.height * bi.screenpos.y;
                         if (bi.bdown == false && r.Contains(pos))
                             bi.bdown = true;
                         //bi.bdown = bi.dest.Contains(pos);
@@ -245,7 +245,7 @@ public class vjoy : MonoBehaviour
             centerpos.y = centrey;
             //back
             //GUI.DrawTextureWithTexCoords(new Rect(left, top, size, size), joyback, CalcUI(joyback,0, 0, 64*3,64*3));
-            //DrawRect(new Vector2(centrex, centrey), size, 0, 0, 64 * 3, 64 * 3);
+            DrawRect(new Vector2(centrex, centrey), size, 0, 0, 64 * 3, 64 * 3);
         }
 
 
@@ -272,8 +272,8 @@ public class vjoy : MonoBehaviour
         foreach (var bi in btnInfo)
         {
             Rect r = bi.dest;
-            r.x = Screen.width*bi.screenpos.x + r.x;
-            r.y = Screen.height*bi.screenpos.y + r.y;
+            r.x = Screen.width * bi.screenpos.x + r.x;
+            r.y = Screen.height * bi.screenpos.y + r.y;
             if (bi.bdown)
             {
                 GUI.DrawTextureWithTexCoords(r, joyback, bi.uvdown);
