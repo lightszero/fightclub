@@ -1,0 +1,3 @@
+content\char\char-cur\hit1.anim.bin
+content\char\char-cur\hit2.anim.bin
+content\char\char-cur\stand.anim.bin
