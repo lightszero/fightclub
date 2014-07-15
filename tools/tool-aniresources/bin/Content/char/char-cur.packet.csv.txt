@@ -1,0 +1,9 @@
+﻿char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A79C0_pal_1E.png,16,16,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A7C44_pal_1E.png,560,16,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A79DA_pal_1E.png,1104,16,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A7AF0_pal_1E.png,16,560,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A7B7A_pal_1E.png,560,560,512,768
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A79EA_pal_1E.png,16,1104,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A7A0A_pal_1E.png,1104,560,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A79FA_pal_1E.png,560,1360,512,512
+char\char-cur\action-srcs\stand\LIBRARY\id_00_tile_000A79B0_pal_1E.png,1104,1104,512,512
