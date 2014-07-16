@@ -74,12 +74,23 @@ public class vjoy : MonoBehaviour
             i.uvdown = CalcUI(joyback, 64 * 4 + 192, 128, 64, 64);
             btnInfo.Add(i);
         }
+        {
+            BtnInfo i = new BtnInfo();
+            i.dest = new Rect(-size * 4.5f / 3 + size / 3 , size / 3 * 0.5f, size / 3*2, size / 3);
+            i.screenpos = new Vector2(1, 0);
+            i.id = KeyCode.L;
+            i.buttonid = "Menu";
+            i.uv = CalcUI(joyback, 0, 256, 128, 64);
+            i.uvdown = CalcUI(joyback, 128, 256, 128, 64);
+            btnInfo.Add(i);
+        }
     }
     bool wdown = false;
     bool sdown = false;
     bool adown = false;
     bool ddown = false;
     public static Vector2 joydir = new Vector2(0, 0);
+    public bool bMenu = false;
     // Update is called once per frame
     Vector2 lasttouch = new Vector2(0, 0);
     bool bUseJoyExt = true;
@@ -103,8 +114,13 @@ public class vjoy : MonoBehaviour
             if (Input.GetAxis("Triger") >0.8 ) btriger = true;
             bL = Input.GetButton("L");
             bR = Input.GetButton("R");
+            bMenu = Input.GetButton("Menu");
         }
         
+        if(!bMenu&& (Input.GetKey(KeyCode.Menu)||Input.GetKey(KeyCode.Escape)))
+        {
+            bMenu = true;
+        }
         //float axitx2 = Input.GetAxis("6");
         //float axity2 = Input.GetAxis("7");
         joydir.x = axitx;
@@ -149,6 +165,13 @@ public class vjoy : MonoBehaviour
                 else if (bi.buttonid == "R")
                 {
                     bi.bdown = bR;
+                }
+                else if(bi.buttonid=="Menu")
+                {
+                    if(bMenu)
+                        bi.bdown = true ;
+                    if(bi.bdown)
+                        bMenu = true;
                 }
                 else
                 {
