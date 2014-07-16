@@ -10,6 +10,7 @@ public class vjoy : MonoBehaviour
     float joysize = 0;
     void Start()
     {
+
         float dpi = Screen.dpi;
         if (dpi == 0) dpi = defDPI;
 
@@ -20,6 +21,7 @@ public class vjoy : MonoBehaviour
             BtnInfo i = new BtnInfo();
             i.dest = new Rect(-size * 4.5f / 3 + size / 3, -size / 3 * 2.5f, size / 3, size / 3);
             i.id = KeyCode.J;
+            i.buttonid = "Fire2";
             i.uv = CalcUI(joyback, 64 * 4, 0, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 64, 0, 64, 64);
             btnInfo.Add(i);
@@ -28,6 +30,7 @@ public class vjoy : MonoBehaviour
             BtnInfo i = new BtnInfo();
             i.dest = new Rect(-size * 4.5f / 3 + size / 3 * 2, -size / 3 * 2.5f, size / 3, size / 3);
             i.id = KeyCode.K;
+            i.buttonid = "Fire1";
             i.uv = CalcUI(joyback, 64 * 4, 64, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 64, 64, 64, 64);
             btnInfo.Add(i);
@@ -36,6 +39,7 @@ public class vjoy : MonoBehaviour
             BtnInfo i = new BtnInfo();
             i.dest = new Rect(-size * 4.5f / 3 + size / 3 * 3, -size / 3 * 2.5f, size / 3, size / 3);
             i.id = KeyCode.L;
+            i.buttonid = "Jump";
             i.uv = CalcUI(joyback, 64 * 4, 128, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 64, 128, 64, 64);
             btnInfo.Add(i);
@@ -45,6 +49,7 @@ public class vjoy : MonoBehaviour
             i.dest = new Rect(size / 3 * -0.5f + size / 3, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha1;
+            i.buttonid = "Triger";
             i.uv = CalcUI(joyback, 64 * 4 + 128, 0, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 192, 0, 64, 64);
             btnInfo.Add(i);
@@ -54,6 +59,7 @@ public class vjoy : MonoBehaviour
             i.dest = new Rect(size / 3 * -0.5f + size / 3 * 2, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha2;
+            i.buttonid = "L";
             i.uv = CalcUI(joyback, 64 * 4 + 128, 64, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 192, 64, 64, 64);
             btnInfo.Add(i);
@@ -63,6 +69,7 @@ public class vjoy : MonoBehaviour
             i.dest = new Rect(size / 3 * -0.5f + size / 3 * 3, size / 3 * 0.5f, size / 3, size / 3);
             i.screenpos = Vector2.zero;
             i.id = KeyCode.Alpha3;
+            i.buttonid = "R";
             i.uv = CalcUI(joyback, 64 * 4 + 128, 128, 64, 64);
             i.uvdown = CalcUI(joyback, 64 * 4 + 192, 128, 64, 64);
             btnInfo.Add(i);
@@ -75,6 +82,7 @@ public class vjoy : MonoBehaviour
     public static Vector2 joydir = new Vector2(0, 0);
     // Update is called once per frame
     Vector2 lasttouch = new Vector2(0, 0);
+    bool bUseJoyExt = true;
     void Update()
     {
         wdown = false;
@@ -83,35 +91,73 @@ public class vjoy : MonoBehaviour
         ddown = false;
         joydir.x = 0;
         joydir.y = 0;
+        float axitx = Input.GetAxis("Horizontal");
+        float axity = Input.GetAxis("Vertical");
+        bool btriger = false;
+        bool bL = false;
+        bool bR = false;
+        if (bUseJoyExt)
+        {
+            if (Input.GetAxis("DPadX") != 0) axitx = Input.GetAxis("DPadX");
+            if (Input.GetAxis("DPadY") != 0) axity = Input.GetAxis("DPadY");
+            if (Input.GetAxis("Triger") >0.8 ) btriger = true;
+            bL = Input.GetButton("L");
+            bR = Input.GetButton("R");
+        }
+        
+        //float axitx2 = Input.GetAxis("6");
+        //float axity2 = Input.GetAxis("7");
+        joydir.x = axitx;
+        joydir.y = axity;
+
         if (Input.GetKey(KeyCode.W))
         {
             wdown = true;
 
-            joydir.y += 1;
+            joydir.y = 1;
         }
         if (Input.GetKey(KeyCode.S))
         {
             sdown = true;
-            joydir.y += -1;
+            joydir.y = -1;
         }
         if (Input.GetKey(KeyCode.A))
         {
             adown = true;
-            joydir.x += -1;
+            joydir.x = -1;
         }
         if (Input.GetKey(KeyCode.D))
         {
             ddown = true;
-            joydir.x += 1;
+            joydir.x = 1;
         }
 
 
         foreach (var bi in btnInfo)
         {
             bi.bdown = Input.GetKey(bi.id);
+            if (!bi.bdown && string.IsNullOrEmpty(bi.buttonid) == false)
+            {
+                if (bi.buttonid == "Triger")
+                {
+                    bi.bdown = btriger;
+                }
+                else if(bi.buttonid =="L")
+                {
+                    bi.bdown = bL;
+                }
+                else if (bi.buttonid == "R")
+                {
+                    bi.bdown = bR;
+                }
+                else
+                {
+                    bi.bdown = Input.GetButton(bi.buttonid);
+                }
+            }
         }
 
-        bool bMapKey = false;
+        bool bMapKey = true;
         if (joydir.x == 0 && joydir.y == 0 && Pos2Key)
         {
             bMapKey = true;//打开位置映射
@@ -220,6 +266,7 @@ public class vjoy : MonoBehaviour
     public class BtnInfo
     {
         public KeyCode id;
+        public string buttonid;
         public Vector2 screenpos = Vector2.one;
         public Rect dest;
         public Rect uv;
