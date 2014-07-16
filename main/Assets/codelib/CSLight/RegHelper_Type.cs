@@ -298,9 +298,21 @@ namespace CSLight
             else if (code == logictoken.less_equal)//[5] = {Boolean op_LessThanOrEqual(CLScriptExt.Vector3, CLScriptExt.Vector3)}
                 call = type.GetMethod("op_LessThanOrEqual");
             else if (code == logictoken.equal)//[6] = {Boolean op_Equality(CLScriptExt.Vector3, CLScriptExt.Vector3)}
+            {
+                if(left==null || right.type==null)
+                {
+                    return left == right.value;
+                }
                 call = type.GetMethod("op_Equality");
+            }
             else if (code == logictoken.not_equal)//[7] = {Boolean op_Inequality(CLScriptExt.Vector3, CLScriptExt.Vector3)}
+            {
+                if (left == null || right.type == null)
+                {
+                    return left != right.value;
+                }
                 call = type.GetMethod("op_Inequality");
+            }
             var obj = call.Invoke(null, new object[] { left, right.value });
             return (bool)obj;
         }
