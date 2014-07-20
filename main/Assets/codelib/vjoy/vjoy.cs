@@ -78,7 +78,7 @@ public class vjoy : MonoBehaviour
             BtnInfo i = new BtnInfo();
             i.dest = new Rect(-size * 4.5f / 3 + size / 3 , size / 3 * 0.5f, size / 3*2, size / 3);
             i.screenpos = new Vector2(1, 0);
-            i.id = KeyCode.L;
+            i.id = KeyCode.Escape;
             i.buttonid = "Menu";
             i.uv = CalcUI(joyback, 0, 256, 128, 64);
             i.uvdown = CalcUI(joyback, 128, 256, 128, 64);
