@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 
 namespace control
 {
-    public class GamePadUtil
-    {
-    }
     public enum PADTAG      //一个字节可以表示方向，两次
     {
         PADKEY_BACKUP = 7, PADKEY_UP = 8, PADKEY_FRONTUP = 9,
@@ -17,7 +16,7 @@ namespace control
     }
     public enum KEYTAG      //一个字节描述八个按键状态，一次
     {
-        GAMEKEY_NONE=0,
+        GAMEKEY_NONE = 0,
         GAMEKEY_1 = 1,
         GAMEKEY_2 = 2,
         GAMEKEY_3 = 4,
@@ -27,10 +26,10 @@ namespace control
         GAMEKEY_7 = 64,
         GAMEKEY_8 = 128,
     }
-    public enum FUNCKEYTAG  //功能键，Controller不需要管理
+    public enum FACETAG
     {
-        FUNCKEY_BACK = 1,
-        FUNCKEY_START= 2,
+        FACETORIGHT = 1,
+        FACETOLEFT  = -1,
     }
     public interface IPlayerInputController
     {
@@ -49,12 +48,7 @@ namespace control
         {
             get;
         }
-        Queue<FUNCKEYTAG> EventList
-        {
-            get;
-        }
-        void OnDetach(Player driver);
-        void OnAttach(Player driver);
+
     }
     public struct cmd
     {
@@ -65,39 +59,31 @@ namespace control
         }
         public byte padtag;
         public byte keytag;
-        public override string ToString()
-        {
-            return  GetPadString()+GetBtnString();
-        }
-        public string GetPadString()
+
+        public string GetPadString(FACETAG face)
         {
             string str = "";// padtag.ToString();
-            if (padtag == 1) str += "↙";
+            if (padtag == 1) str += face == FACETAG.FACETORIGHT ? "↙" : "↘";
             if (padtag == 2) str += "↓";
-            if (padtag == 3) str += "↘";
-            if (padtag == 4) str += "←";
+            if (padtag == 3) str += face == FACETAG.FACETORIGHT ? "↘" : "↙";
+            if (padtag == 4) str += face == FACETAG.FACETORIGHT ? "←" : "→";
             //if (padtag == 5) str += "⊕";
-            if (padtag == 6) str += "→";
-            if (padtag == 7) str += "↖";
+            if (padtag == 6) str += face == FACETAG.FACETORIGHT ? "→":"←";
+            if (padtag == 7) str += face == FACETAG.FACETORIGHT ? "↖":"↗";
             if (padtag == 8) str += "↑";
-            if (padtag == 9) str += "↗";
+            if (padtag == 9) str += face == FACETAG.FACETORIGHT ? "↗":"↖";
             return str;
         }
         public string GetBtnString()
         {
             string str = "";
-            if ((keytag & (byte)KEYTAG.GAMEKEY_1) != 0) str += "拳";
-            if ((keytag & (byte)KEYTAG.GAMEKEY_2) != 0) str += "脚";
-            if ((keytag & (byte)KEYTAG.GAMEKEY_3) != 0) str += "跳";
+            if ((keytag & (byte)KEYTAG.GAMEKEY_1) != 0) str += "跳";
+            if ((keytag & (byte)KEYTAG.GAMEKEY_2) != 0) str += "打";
             if (keytag != 0 && str.Length == 0) str += keytag.ToString("X2");
             return str;
         }
     }
-    public enum FACETAG
-    {
-        FACETORIGHT,
-        FACETOLEFT,
-    }
+
     public class GamePadController : IPlayerInputController
     {
         public GamePadController()
@@ -123,29 +109,30 @@ namespace control
                 PADTAG ptag = PADTAG.PADKEY_RELEASE;
                 KEYTAG ktag = KEYTAG.GAMEKEY_NONE;
                 //GamePadState state = GamePad.GetState(PlayerIndex);
-                if(vjoy.joydir.x<-0.5f)
+                if (vjoy.joydir.x < -0.5f)
                 {
-                    ptag--;
+                    ptag -= 1 * dir;
                 }
-                if(vjoy.joydir.x>0.5f)
+                if (vjoy.joydir.x > 0.5f)
                 {
-                    ptag++;
+                    ptag += 1 * dir;
                 }
-                if(vjoy.joydir.y<-0.5f)
-                {
-                    ptag += 3;
-                }
-                if(vjoy.joydir.y>0.5f)
+
+                if (vjoy.joydir.y < -0.5f)
                 {
                     ptag -= 3;
+                }
+                if (vjoy.joydir.y > 0.5f)
+                {
+                    ptag += 3;
                 }
                 if (vjoy.btnInfo[0].bdown || vjoy.btnInfo[2].bdown)//J or L
                 {
                     ktag |= KEYTAG.GAMEKEY_1;
                 }
-                if(vjoy.btnInfo[1].bdown||vjoy.btnInfo[2].bdown)//K or L
+                if (vjoy.btnInfo[1].bdown || vjoy.btnInfo[2].bdown)//K or L
                 {
-                    ktag |= KEYTAG.GAMEKEY_1;
+                    ktag |= KEYTAG.GAMEKEY_2;
                 }
 
 
@@ -154,6 +141,7 @@ namespace control
                     last.padtag = (byte)ptag;
                     last.keytag = (byte)ktag;
                     CommandList.Enqueue(last);
+                    //Debug.Log("last=" + last);
                 }
 
 
@@ -165,13 +153,27 @@ namespace control
         }
         public override string ToString()
         {
-            return last.ToString();
-            
+            return last.GetPadString(_FACETAG) + last.GetBtnString();
+
         }
+        int dir = 1;
+        FACETAG _FACETAG = FACETAG.FACETORIGHT;
         public FACETAG FACETAG
         {
-            get;
-            set;
+
+            set
+            {
+                _FACETAG = value;
+                if (_FACETAG == control.FACETAG.FACETOLEFT)
+                    dir = -1;
+                else
+                    dir = 1;
+
+            }
+            get
+            {
+                return _FACETAG;
+            }
         }
         private cmd last = new cmd((byte)PADTAG.PADKEY_RELEASE, (byte)KEYTAG.GAMEKEY_NONE);
         public Queue<cmd> CommandList
@@ -179,21 +181,7 @@ namespace control
             get;
             private set;
         }
-        public Queue<FUNCKEYTAG> EventList
-        {
-            get;
-            private set;
-        }
 
 
-        public void OnDetach(Player driver)
-        {
-
-        }
-
-        public void OnAttach(Player driver)
-        {
-
-        }
     };
 }

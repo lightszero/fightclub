@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace control
 {
@@ -199,9 +200,8 @@ namespace control
             }
             foreach (byte ktag in btntag)
             {
-                if ((ktag & (byte)KEYTAG.GAMEKEY_1) != 0) str += "拳";
-                if ((ktag & (byte)KEYTAG.GAMEKEY_2) != 0) str += "脚";
-                if ((ktag & (byte)KEYTAG.GAMEKEY_3) != 0) str += "跳";
+                if ((ktag & (byte)KEYTAG.GAMEKEY_1) != 0) str += "跳";
+                if ((ktag & (byte)KEYTAG.GAMEKEY_2) != 0) str += "打";
                 if (ktag != 0 && str.Length == 0) str += ktag.ToString("X2");
             }
             str += ";";
@@ -217,9 +217,9 @@ namespace control
         IPlayerInputController controller;
         public  void SetInput(IPlayerInputController _controller)//设定输入源，可以是AI
         {
-            if (controller != null) controller.OnDetach(this);
+
             controller = _controller;
-            controller.OnAttach(this);
+
         }
         public PlayerState PlayerState
         {
@@ -229,10 +229,14 @@ namespace control
         public bool Update()
         {
             //判断是否有招式符合条件
+            //Debug.Log("Update " + (PlayerState != null) + "|" + (controller!=null));
             if (PlayerState != null&&controller.CommandList.Count!=0)
             {
+                //Debug.Log("Update 2");
+
                 foreach (SkillCmd scmd in PlayerState.listSkill)
                 {
+                    //Debug.Log(scmd.SkillName);
                     if (scmd.Parse(controller.CommandList))
                     {
                         lastskill = scmd;
