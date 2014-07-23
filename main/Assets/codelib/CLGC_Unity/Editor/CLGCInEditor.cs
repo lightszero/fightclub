@@ -37,7 +37,9 @@ public class CLGCInEditor  {
     [System.Runtime.InteropServices.DllImport("kernel32.dll")]
     public static extern bool FreeConsole();
 
-    [MenuItem("DEBUG/CLOSECONSOLE", false, 1)] 
+
+
+    [MenuItem("DEBUG/CloseConsole", false, 1)] 
     public static void CLOSECONSOLE()
     {
 

@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace control
 {
+
     public enum DriveStyle
     {
         PadDrive,           //输入方向启动的技能，比如移动等等，
@@ -16,6 +17,7 @@ namespace control
     }
     public class SkillCmd//描述一条出招
     {
+
         public String SkillName;
         public DriveStyle DriveStyle;//触发条件
         public bool ClearCmd=false;//是否清除之前的输入

@@ -1,0 +1,97 @@
+
+cur.png
+size: 254,62
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+id_00_tile_000A79B0_pal_1E
+  rotate: true
+  xy: 163, 8
+  size: 23, 31
+  orig: 32, 32
+  offset: 6, 0
+  index: -1
+id_00_tile_000A79C0_pal_1E
+  rotate: false
+  xy: 196, 2
+  size: 24, 30
+  orig: 32, 32
+  offset: 5, 1
+  index: -1
+id_00_tile_000A79DA_pal_1E
+  rotate: false
+  xy: 163, 33
+  size: 31, 29
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+id_00_tile_000A79EA_pal_1E
+  rotate: true
+  xy: 45, 7
+  size: 28, 32
+  orig: 32, 32
+  offset: 2, 0
+  index: -1
+id_00_tile_000A79FA_pal_1E
+  rotate: true
+  xy: 129, 32
+  size: 30, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+id_00_tile_000A7A0A_pal_1E
+  rotate: true
+  xy: 222, 6
+  size: 23, 32
+  orig: 32, 32
+  offset: 2, 0
+  index: -1
+id_00_tile_000A7AF0_pal_1E
+  rotate: false
+  xy: 79, 2
+  size: 25, 28
+  orig: 32, 32
+  offset: 1, 4
+  index: -1
+id_00_tile_000A7B7A_pal_1E
+  rotate: true
+  xy: 46, 37
+  size: 25, 35
+  orig: 32, 48
+  offset: 1, 13
+  index: -1
+id_00_tile_000A7BF0_pal_1E
+  rotate: false
+  xy: 2, 37
+  size: 42, 25
+  orig: 48, 32
+  offset: 0, 1
+  index: -1
+id_00_tile_000A7C0E_pal_1E
+  rotate: false
+  xy: 83, 46
+  size: 44, 16
+  orig: 48, 16
+  offset: 2, 0
+  index: -1
+id_00_tile_000A7C26_pal_1E
+  rotate: false
+  xy: 2, 10
+  size: 41, 25
+  orig: 48, 32
+  offset: 1, 1
+  index: -1
+id_00_tile_000A7C44_pal_1E
+  rotate: false
+  xy: 230, 31
+  size: 24, 31
+  orig: 32, 32
+  offset: 5, 0
+  index: -1
+id_00_tile_000A7C5E_pal_1E
+  rotate: true
+  xy: 196, 34
+  size: 28, 32
+  orig: 32, 32
+  offset: 2, 0
+  index: -1

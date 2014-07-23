@@ -57,6 +57,10 @@ public class PacketDesc
         return text;
     }
 }
+public class PacketList
+{
+
+}
 //public class Packet
 //{
 //    public Packet(string localurl)
