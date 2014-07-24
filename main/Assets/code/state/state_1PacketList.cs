@@ -152,30 +152,39 @@ public class state_1PacketList : IState
         }
     }
     void OnCurLoadFinish()
-    {
+    {//先临时验证一下代码构造spine动画,两个atlas的设计问题较多,必须要休整一下播放组件
         GameObject curObj=new GameObject();
         curObj.name="spine-cur";
         SkeletonAnimation ani = curObj.AddComponent<SkeletonAnimation>();
-
-        Spine.Atlas atlas =new Spine.Atlas(new System.IO.StringReader(curAtlas),"",new TextureLoad(curAtlasTex));
-        Spine.SkeletonJson sjson=new Spine.SkeletonJson(atlas);
-        Spine.SkeletonData da = sjson.ReadSkeletonData(new System.IO.StringReader(curSK));
-       
-        ani.skeleton = new Spine.Skeleton(da);
+        AtlasAsset assAtlas = new AtlasAsset();
+        assAtlas.materials = new Material[1];
+        assAtlas.materials[0] = new Material(Shader.Find("Spine/Skeleton"));
+        assAtlas.materials[0].mainTexture = curAtlasTex;
+        var atlas = new Spine.Atlas(new System.IO.StringReader(curAtlas), "", new TextureLoad(assAtlas.materials[0]));
+        atlas.FlipV();
+        assAtlas.SetAtlas(atlas);
+        SkeletonDataAsset assSk = new SkeletonDataAsset();
+         
+        Spine.SkeletonJson sjson = new Spine.SkeletonJson(assAtlas.GetAtlas());
+        assSk.SetSkeletonData(sjson.ReadSkeletonData(new System.IO.StringReader(curSK)));
+        assSk.atlasAsset = assAtlas;
+        ani.skeletonDataAsset = assSk;
         ani.Reset();
+        ani.state.SetAnimation(0, "idle", true);
+
     }
     class TextureLoad:Spine.TextureLoader
     {
-        Texture2D tthis;
-        public TextureLoad(Texture2D tex)
+        Material tthis;
+        public TextureLoad(Material tex)
         {
             tthis = tex;
         }
         public void Load(Spine.AtlasPage page, string path)
         {
             page.rendererObject = tthis;
-            page.width = tthis.width;
-            page.height = tthis.height;
+            page.width = tthis.mainTexture.width;
+            page.height = tthis.mainTexture.height;
           
         }
 

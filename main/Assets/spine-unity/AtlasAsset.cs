@@ -45,6 +45,9 @@ public class AtlasAsset : ScriptableObject {
 
 	/// <returns>The atlas or null if it could not be loaded.</returns>
 	public Atlas GetAtlas () {
+        if (atlas != null)
+            return atlas;
+
 		if (atlasFile == null) {
 			Debug.LogError("Atlas file not set for atlas asset: " + name, this);
 			Reset();
@@ -57,8 +60,7 @@ public class AtlasAsset : ScriptableObject {
 			return null;
 		}
 
-		if (atlas != null)
-			return atlas;
+
 
 		try {
 			atlas = new Atlas(new StringReader(atlasFile.text), "", new MaterialsTextureLoader(this));
@@ -69,6 +71,10 @@ public class AtlasAsset : ScriptableObject {
 			return null;
 		}
 	}
+    public void  SetAtlas(Atlas atlas)
+    {
+        this.atlas = atlas;
+    }
 }
 
 public class MaterialsTextureLoader : TextureLoader {

@@ -38,8 +38,8 @@ public class SkeletonDataAsset : ScriptableObject {
 	public AtlasAsset atlasAsset;
 	public TextAsset skeletonJSON;
 	public float scale = 1;
-	public String[] fromAnimation;
-	public String[] toAnimation;
+	public String[] fromAnimation=new string[0];
+	public String[] toAnimation=new string[0];
 	public float[] duration;
 	public float defaultMix;
 	private SkeletonData skeletonData;
@@ -51,7 +51,11 @@ public class SkeletonDataAsset : ScriptableObject {
 	}
 
 	public SkeletonData GetSkeletonData (bool quiet) {
-		if (atlasAsset == null) {
+        if (skeletonData != null)
+            return skeletonData; 
+        
+        if (atlasAsset == null)
+        {
 			if (!quiet)
 				Debug.LogError("Atlas not set for SkeletonData asset: " + name, this);
 			Reset();
@@ -71,8 +75,7 @@ public class SkeletonDataAsset : ScriptableObject {
 			return null;
 		}
 
-		if (skeletonData != null)
-			return skeletonData;
+
 
 		SkeletonJson json = new SkeletonJson(atlas);
 		json.Scale = scale;
@@ -94,6 +97,19 @@ public class SkeletonDataAsset : ScriptableObject {
 		return skeletonData;
 	}
 
+    public void SetSkeletonData(SkeletonData data)
+    {
+        this.skeletonData = data;
+
+        stateData = new AnimationStateData(skeletonData);
+        stateData.DefaultMix = defaultMix;
+        for (int i = 0, n = fromAnimation.Length; i < n; i++)
+        {
+            if (fromAnimation[i].Length == 0 || toAnimation[i].Length == 0) continue;
+            stateData.SetMix(fromAnimation[i], toAnimation[i], duration[i]);
+        }
+
+    }
 	public AnimationStateData GetAnimationStateData () {
 		if (stateData != null)
 			return stateData;
