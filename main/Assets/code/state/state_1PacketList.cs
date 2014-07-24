@@ -13,7 +13,8 @@ public class state_1PacketList : IState
     //CLUI_Node_Box guiBack = null;
     //CLUI_Node_Empty guiListBack = null;
 
-    Queue<string> cacheurls = new Queue<string>();
+    PacketList plist = new PacketList();
+
     public void OnInit(IStateMgr mgr)
     {
         this.mgr = mgr;
@@ -102,86 +103,85 @@ public class state_1PacketList : IState
             }
         }
 
-        //应付Oray域名转向的方法
-        //第一次请求 会返回一个Set-Cookie
-        string cook = null;
-        {
-            System.Net.HttpWebRequest req = (HttpWebRequest)System.Net.HttpWebRequest.Create("http://w2.cltri.com");
-
-            HttpWebResponse response = (HttpWebResponse)req.GetResponse();
-            cook =response.Headers["Set-Cookie"];
-            Debug.Log("cook=" + cook);
-            Debug.Log(response.ResponseUri + "(" + response.ContentLength + ")" + response.StatusCode + " " + response.StatusDescription);
-
-            System.IO.StreamReader sr = new System.IO.StreamReader(response.GetResponseStream());
-            string text = sr.ReadToEnd();
-            Debug.Log(text);
-        }
-        string[] cc = cook.Split(new string[] { ";", " " }, System.StringSplitOptions.RemoveEmptyEntries);
-        string cpath="";
-        Dictionary<string, string> cookie = new Dictionary<string, string>();
-        foreach(var c in cc)
-        {
-            Debug.Log("c=" + c);
-            
-            string[] v = c.Split('=');
-            if(v[0]=="path")
-            {
-                cpath=v[1];
-                continue;
-            }
-            cookie[v[0]] =v[1];
-        }
-        //第二次请求用此SetCookie的值再请求才能返回正确值
-        {
-            System.Net.HttpWebRequest req = (HttpWebRequest)System.Net.HttpWebRequest.Create("http://w2.cltri.com");
-            req.CookieContainer = new CookieContainer();
-            foreach (var c in cookie)
-            {
-                req.CookieContainer.Add(new Cookie(c.Key, c.Value,cpath,req.RequestUri.Host));
-            }
-            HttpWebResponse response = (HttpWebResponse)req.GetResponse();
-            cook = response.Headers["Set-Cookie"];
-            Debug.Log(response.ResponseUri + "(" + response.ContentLength + ")" + response.StatusCode + " " + response.StatusDescription);
-
-            foreach(string k in response.Headers)
-            {
-                Debug.Log("k=" + k + " v= " + response.Headers[k]);
-            }
-            System.IO.StreamReader sr = new System.IO.StreamReader(response.GetResponseStream());
-            string text = sr.ReadToEnd();
-            Debug.Log(text);// .Substring(0,100));
-        }
-        //www = new WWW("http://w1.cltri.com");
 
         //从磁盘加载
 #if UNITY_STANDALONE
-        string pakpath = "";
-        if (Application.isEditor)
+        IList<string> packets= plist.InitPacketListLocal();
+        foreach(var p in packets)
         {
-            pakpath = System.IO.Path.GetFullPath("../game/paks");
-        }
-        else
-        {
-            pakpath = System.IO.Path.GetFullPath("paks");
-            Debug.Log("path1 =" + pakpath);
+            Debug.Log("got packet=" + p);
         }
 
-        string[] pakdesc = System.IO.Directory.GetFiles(pakpath, "packet.desc.txt", System.IO.SearchOption.AllDirectories);
+        ResmgrNative.Instance.SetCacheUrl(plist.GetPackPathLocal());
        
-        foreach (var p in pakdesc)
-        {
-            string path = System.IO.Path.GetDirectoryName(p);
-            string cacheurl = path;  //"file://" +                path;
-            cacheurls.Enqueue(cacheurl);
-
-            ResmgrNative.Instance.LoadTexture2DFromCache("logo.jpg",cacheurl, (tex, _cacheurl) =>
-            {
-                AddPacket(_cacheurl,tex);
-            });
-        }
-        ResmgrNative.Instance.SetCacheUrl(cacheurls.Dequeue());
+        loadcurcount=3;
+        ResmgrNative.Instance.LoadStringFromCache("base/skeleton.json.txt", "", onloadsk);
+        ResmgrNative.Instance.LoadStringFromCache("base/cur.atlas.txt", "", onloadat);
+        ResmgrNative.Instance.LoadTexture2DFromCache("base/cur.png", "", onloadatt);
 #endif
+    }
+     int loadcurcount=3;
+    string curSK;
+    string curAtlas;
+    Texture2D curAtlasTex;
+    void onloadsk(string code,string tag)
+    {
+        curSK=code;
+        loadcurcount--;
+        if(loadcurcount==0)
+        {
+            OnCurLoadFinish();
+        }
+    }
+    void onloadat(string code,string tag)
+    {
+        curAtlas = code;
+        loadcurcount--;
+        if (loadcurcount == 0)
+        {
+            OnCurLoadFinish();
+        }
+    }
+    void onloadatt(Texture2D tex,string tag)
+    {
+        curAtlasTex = tex;
+        loadcurcount--;
+        if (loadcurcount == 0)
+        {
+            OnCurLoadFinish();
+        }
+    }
+    void OnCurLoadFinish()
+    {
+        GameObject curObj=new GameObject();
+        curObj.name="spine-cur";
+        SkeletonAnimation ani = curObj.AddComponent<SkeletonAnimation>();
+
+        Spine.Atlas atlas =new Spine.Atlas(new System.IO.StringReader(curAtlas),"",new TextureLoad(curAtlasTex));
+        Spine.SkeletonJson sjson=new Spine.SkeletonJson(atlas);
+        Spine.SkeletonData da = sjson.ReadSkeletonData(new System.IO.StringReader(curSK));
+       
+        ani.skeleton = new Spine.Skeleton(da);
+        ani.Reset();
+    }
+    class TextureLoad:Spine.TextureLoader
+    {
+        Texture2D tthis;
+        public TextureLoad(Texture2D tex)
+        {
+            tthis = tex;
+        }
+        public void Load(Spine.AtlasPage page, string path)
+        {
+            page.rendererObject = tthis;
+            page.width = tthis.width;
+            page.height = tthis.height;
+          
+        }
+
+        public void Unload(object texture)
+        {
+        }
     }
     //WWW www;
     void AddPacket(string _cacheurl, Texture2D tex)
