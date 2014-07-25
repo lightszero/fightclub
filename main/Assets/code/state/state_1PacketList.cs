@@ -155,41 +155,51 @@ public class state_1PacketList : IState
     {//先临时验证一下代码构造spine动画,两个atlas的设计问题较多,必须要休整一下播放组件
         GameObject curObj=new GameObject();
         curObj.name="spine-cur";
-        SkeletonAnimation ani = curObj.AddComponent<SkeletonAnimation>();
-        AtlasAsset assAtlas = new AtlasAsset();
-        assAtlas.materials = new Material[1];
-        assAtlas.materials[0] = new Material(Shader.Find("Spine/Skeleton"));
-        assAtlas.materials[0].mainTexture = curAtlasTex;
-        var atlas = new Spine.Atlas(new System.IO.StringReader(curAtlas), "", new TextureLoad(assAtlas.materials[0]));
+        SkeletonAnimationCL ani = curObj.AddComponent<SkeletonAnimationCL>();
+        //AtlasAsset assAtlas = new AtlasAsset();
+        //assAtlas.materials = new Material[1];
+        //assAtlas.materials[0] = new Material(Shader.Find("Spine/Skeleton"));
+        //assAtlas.materials[0].mainTexture = curAtlasTex;
+        Dictionary<string, Texture2D> texs = new Dictionary<string, Texture2D>();
+        texs["cur.png"] = curAtlasTex;
+        var atlas = new Spine.Atlas(new System.IO.StringReader(curAtlas), "", new TextureLoad(texs));
         atlas.FlipV();
-        assAtlas.SetAtlas(atlas);
-        SkeletonDataAsset assSk = new SkeletonDataAsset();
-         
-        Spine.SkeletonJson sjson = new Spine.SkeletonJson(assAtlas.GetAtlas());
-        assSk.SetSkeletonData(sjson.ReadSkeletonData(new System.IO.StringReader(curSK)));
-        assSk.atlasAsset = assAtlas;
-        ani.skeletonDataAsset = assSk;
+        //assAtlas.SetAtlas(atlas);
+
+        Spine.SkeletonJson sjson = new Spine.SkeletonJson(atlas);
+        sjson.Scale = 1.0f/64.0f;
+        var data=sjson.ReadSkeletonData(new System.IO.StringReader(curSK));
+        
+        ani.skeleton = new Spine.Skeleton(data);
         ani.Reset();
         ani.state.SetAnimation(0, "idle", true);
 
     }
     class TextureLoad:Spine.TextureLoader
     {
-        Material tthis;
-        public TextureLoad(Material tex)
+        IDictionary<string, Texture2D> texs;
+
+        public TextureLoad(IDictionary<string, Texture2D> texs)
         {
-            tthis = tex;
+           this.texs = texs;
+            foreach(var t in texs.Keys)
+            {
+                Debug.Log("got tex:" + t);
+            }
         }
         public void Load(Spine.AtlasPage page, string path)
         {
-            page.rendererObject = tthis;
-            page.width = tthis.mainTexture.width;
-            page.height = tthis.mainTexture.height;
-          
+            Debug.Log("load page:" + page.name);
+            var mat = new Material(Shader.Find("Spine/Skeleton"));
+            mat.mainTexture =texs[page.name];
+            page.rendererObject = mat;
+            page.width = mat.mainTexture.width;
+            page.height = mat.mainTexture.height;
         }
 
-        public void Unload(object texture)
+        public void Unload(object mat)
         {
+            GameObject.Destroy(mat as Material);
         }
     }
     //WWW www;
